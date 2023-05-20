@@ -1,11 +1,9 @@
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { generateToken } = require("../config/jwtToken");
-const { generateRefreshToken } = require('../config/refreshToken')
+const { generateRefreshToken } = require("../config/refreshToken");
 
-
-
-// Create a User 
+// Create a User
 const createUser = asyncHandler(async (req, res) => {
   const email = req.body.email;
 
@@ -18,7 +16,6 @@ const createUser = asyncHandler(async (req, res) => {
     throw new Error("User Already Exists");
   }
 });
-
 
 // Login a user
 const loginUserCtrl = asyncHandler(async (req, res) => {
@@ -51,7 +48,65 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
   }
 });
 
+// Update a User
+const updateUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const updatedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        firstname: req?.body?.firstname,
+        lastname: req?.body?.lastname,
+        email: req?.body?.email,
+        mobile: req?.body?.mobile,
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(updatedUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Get all users
+const getAllUsers = asyncHandler(async (req, res) => {
+  try {
+    const getUsers = await User.find();
+    res.json(getUsers);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+//get a single users
+const getAUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getAUser = await User.findById(id);
+    res.json(getAUser);
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
+// Delete user
+const deleteUser = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+    res.json({ deletedUser });
+  } catch (error) {
+    throw new Error(error);
+  }
+});
+
 module.exports = {
   createUser,
   loginUserCtrl,
+  getAllUsers,
+  getAUser,
+  deleteUser,
+  updateUser
 };
