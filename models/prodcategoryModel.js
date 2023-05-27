@@ -14,4 +14,4 @@ var prodcategorySchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("PCategory", prodcategorySchema);
+module.exports = mongoose.model("ProductCategory", prodcategorySchema);
